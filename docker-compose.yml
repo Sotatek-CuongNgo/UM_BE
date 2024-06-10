@@ -1,0 +1,42 @@
+services: 
+  node:
+    build: .
+    container_name: um_be_node
+    tty: true
+    volumes:
+      - ./:/work
+      - /work/node_modules
+    ports:
+      - 46511:${APP_PORT}
+    depends_on:
+      - db
+      - redis
+    networks:
+      - um_network
+  db:
+    image: postgres:16.2
+    container_name: um_db
+    tty: true
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_DATABASE}
+    volumes:
+      - ./docker/postgres-data:/var/lib/postgresql/data
+    restart: always
+    ports:
+      - 46512:5432
+    networks:
+      - um_network
+  redis:
+    image: redis:7.2.4
+    container_name: um_redis
+    restart: always
+    ports:
+      - 46513:6379
+    networks:
+      - um_network
+
+networks:
+  um_network:
+    external: true
