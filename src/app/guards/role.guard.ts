@@ -3,6 +3,7 @@ import { Reflector } from '@nestjs/core';
 import { AuthGuard } from '@nestjs/passport';
 import { Roles } from '../enums/common.enum';
 import { ACCESS_ROLES_KEY } from '../decorators/allow-access';
+import { IS_PUBLIC_KEY } from '../decorators/public';
 
 @Injectable()
 export class RoleGuard extends AuthGuard('jwt') {
@@ -15,10 +16,19 @@ export class RoleGuard extends AuthGuard('jwt') {
   }
 
   handleRequest(err, user, info, context: ExecutionContext) {
+    const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
+      context.getHandler(),
+      context.getClass(),
+    ]);
+
     const allowAccessRoles = this.reflector.getAllAndOverride<Roles[]>(ACCESS_ROLES_KEY, [
       context.getHandler(),
       context.getClass(),
     ]);
+
+    if (isPublic) {
+      return user ? user : true;
+    }
 
     if (err || !user) {
       throw err || new UnauthorizedException();

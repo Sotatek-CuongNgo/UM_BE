@@ -1,7 +1,7 @@
 import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { ValidationPipe, ClassSerializerInterceptor } from '@nestjs/common';
-import { AppModule } from './modules/app.module';
+import { AppModule } from './src/modules/app.module';
 import * as bodyParser from 'body-parser';
 
 async function bootstrap() {

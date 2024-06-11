@@ -1,4 +1,9 @@
 export enum Roles {
-  ADMIN = 'ADMIN',
-  EMPLOYEE = 'EMPLOYEE',
+  ADMIN = 'Admin',
+  EMPLOYEE = 'Employee',
+}
+
+export enum OrderBy {
+  ASC = 'ASC',
+  DESC = 'DESC',
 }
