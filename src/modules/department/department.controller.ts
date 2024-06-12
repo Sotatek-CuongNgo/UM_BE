@@ -41,7 +41,7 @@ export class DepartmentController {
   }
 
   @ApiOperation({ summary: 'Delete deparment' })
-  @Patch('/:departmentId')
+  @Delete('/:departmentId')
   async deleteDepartment(@Param('departmentId') departmentId: number) {
     return this.departmentService.deleteDepartment(departmentId);
   }

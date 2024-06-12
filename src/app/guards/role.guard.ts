@@ -34,8 +34,7 @@ export class RoleGuard extends AuthGuard('jwt') {
       throw err || new UnauthorizedException();
     }
 
-    const roleCodes = user.roles.map((role) => role.code);
-    if (!allowAccessRoles.length || roleCodes.some((code) => allowAccessRoles.includes(code))) {
+    if (!allowAccessRoles.length || allowAccessRoles.includes(user.role)) {
       return user;
     }
 

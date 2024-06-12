@@ -22,12 +22,15 @@ export class UserService extends BaseService {
 
   async getUserList(query: SearchUserDto) {
     const { search, page, limit } = query;
-    const queryBuilder = this.userRepo.createQueryBuilder('U').where('U.role = :role', { role: Roles.EMPLOYEE });
+    const queryBuilder = this.userRepo
+      .createQueryBuilder('U')
+      .leftJoinAndSelect('U.department', 'D')
+      .where('U.role = :role', { role: Roles.EMPLOYEE });
 
     if (search) {
       queryBuilder.where(this.searchCaseInsensitive('U.username'), { keyword: `%${search}%` });
     }
-    queryBuilder.orderBy('D.updatedAt', 'DESC');
+    queryBuilder.orderBy('U.updatedAt', 'DESC');
 
     const users = await this.customPaginate<User>(queryBuilder, page, limit);
     return this.responseOk(users);
